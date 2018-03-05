@@ -89,48 +89,6 @@ Each adapter or channel are identified by an alphanumeric string called `code`.
 Adapters codes are wired in the Magento code by their developers, while channels codes can be freely assigned
 by the Magento administrator via backend.
 
-#### For developers: Sending a message directly from your code
-
-With basic framework you can decide to manually send messages from your code.
-Of course this is a developer only feature, if you need something mor human usable, please refer
-to the other modules (e.g.: `msp/module-notifier-event`). 
-
-```
-...
-public function __construct(MSP\NotifierApi\Api\SendMessageInterface $sendMessage)
-{
-    $this->sendMessage = $sendMessage;
-}
-...
-public function execute()
-{
-    ... // Your code
-    try {
-        $this->sendMessage->execute('my_channel_code', 'Hello world!');
-    } catch (\Exception $e) {
-        // Do error management here... maybe your channel does not exist?
-    }
-    ... // Your code
-}
-``` 
-
-**NOTE:** In the previous example, a channel with code `my_channel_code` must be configured from Magento backend.
-
- A set of **Web API** is also available if you wish to remotely handle it.
- 
-#### For sysadmin: Sending a message from console
-
-A command line interface is provided to easily integrate this framework from the sysadmin point of view:
-
-`bin/magento msp:notifier:send my_channel_code "Hello world!"`
-
-### Extending with more adapters
-
-You can create your custom adapters and inject them via Magento DI mechanism in `MSP\Notifier\Model\AdapterRepository` class.
-A quick and simple example can be found in the `msp/module-notifier-core-adapters` (https://github.com/magespecialist/notifier-core-adapters).
-
-A validation and custom parameters mechanism is **provided via VirtualTypes**.
-
 # The other modules constellation
 
 ## MageSpecialist Notifier Core Adapters Module
@@ -167,3 +125,47 @@ GitHub: https://github.com/magespecialist/notifier-queue<br />
 Composer: `composer require msp/module-notifier-queue`
 
 ... // TODO
+
+# For developers
+
+## Sending a message directly from your code
+
+With basic framework you can decide to manually send messages from your code.
+Of course this is a developer only feature, if you need something mor human usable, please refer
+to the other modules (e.g.: `msp/module-notifier-event`). 
+
+```
+...
+public function __construct(MSP\NotifierApi\Api\SendMessageInterface $sendMessage)
+{
+    $this->sendMessage = $sendMessage;
+}
+...
+public function execute()
+{
+    ... // Your code
+    try {
+        $this->sendMessage->execute('my_channel_code', 'Hello world!');
+    } catch (\Exception $e) {
+        // Do error management here... maybe your channel does not exist?
+    }
+    ... // Your code
+}
+``` 
+
+### Extending with more adapters
+
+You can create your custom adapters and inject them via Magento DI mechanism in `MSP\Notifier\Model\AdapterRepository` class.
+A quick and simple example can be found in the `msp/module-notifier-core-adapters` (https://github.com/magespecialist/notifier-core-adapters).
+
+A validation and custom parameters mechanism is **provided via VirtualTypes**.
+
+**NOTE:** In the previous example, a channel with code `my_channel_code` must be configured from Magento backend.
+
+ A set of **Web API** is also available if you wish to remotely handle it.
+ 
+## Sending a message from console
+
+A command line interface is provided to easily integrate this framework from the sysadmin point of view:
+
+`bin/magento msp:notifier:send my_channel_code "Hello world!"`
