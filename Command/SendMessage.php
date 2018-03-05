@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace MSP\Notifier\Command;
 
+use Magento\Framework\ObjectManagerInterface;
 use MSP\NotifierApi\Api\SendMessageInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,20 +18,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SendMessage extends Command
 {
     /**
-     * @var SendMessageInterface
+     * @var ObjectManagerInterface
      */
-    private $sendMessage;
+    private $objectManager;
 
     /**
      * SendMessage constructor.
-     * @param SendMessageInterface $cleanMessage
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        SendMessageInterface $cleanMessage
+        ObjectManagerInterface $objectManager
     ) {
-        $this->sendMessage = $cleanMessage;
-
         parent::__construct();
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -56,7 +56,12 @@ class SendMessage extends Command
         $channel = $input->getArgument('channel');
         $message = $input->getArgument('message');
 
-        if ($this->sendMessage->execute($channel, $message)) {
+        // @codingStandardsIgnoreStart
+        // Must use object manager here
+        $sendMessage = $this->objectManager->get(SendMessageInterface::class);
+        // @codingStandardsIgnoreEnd
+
+        if ($sendMessage->execute($channel, $message)) {
             $output->writeln('Message sent');
         } else {
             $output->writeln('Could not send message');
