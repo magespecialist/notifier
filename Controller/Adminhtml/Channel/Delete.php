@@ -47,7 +47,7 @@ class Delete extends Action
 
         try {
             $channel = $this->channelRepository->get($channelId);
-            $this->channelRepository->deleteById($channel->getId());
+            $this->channelRepository->deleteById((int) $channel->getId());
             $this->messageManager->addSuccessMessage(__('Channel "%1" deleted.', $channel->getName()));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('Could not delete channel: %1.', $e->getMessage()));
