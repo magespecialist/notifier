@@ -4,7 +4,7 @@
     "require": {
         "php": "^7.0|^7.1|^7.2|^8.1",
         "magento/magento2-base": "^2.2|^2.3",
-        "msp/module-notifier-api": "^0.1"
+        "msp/module-notifier-api": "^0.1|^0.2"
     },
     "support": {
         "issues": "https://github.com/magespecialist/m2-MSP_Notifier/issues"
