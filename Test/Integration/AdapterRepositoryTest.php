@@ -22,7 +22,7 @@ class AdapterRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // @codingStandardsIgnoreStart
         $this->adapterRepository = Bootstrap::getObjectManager()->get(AdapterRepositoryInterface::class);

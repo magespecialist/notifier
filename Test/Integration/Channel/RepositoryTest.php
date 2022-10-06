@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace MSP\Notifier\Test\Integration\Channel;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\NoSuchEntityException;
-use MSP\Notifier\Test\Integration\TestCaseWrapper;
+use Magento\TestFramework\Helper\Bootstrap;
+use MSP\NotifierApi\Api\AdapterInterface;
 use MSP\NotifierApi\Api\Data\ChannelInterface;
 
 /**
@@ -28,10 +28,13 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $factory;
 
+    /** @var AdapterInterface|AdapterInterface&\PHPUnit\Framework\MockObject\MockObject|\PHPUnit\Framework\MockObject\MockObject  */
+    private $adapterMock;
+
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // @codingStandardsIgnoreStart
         $this->repository = Bootstrap::getObjectManager()->get(
@@ -51,10 +54,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             \MSP\NotifierApi\Api\Data\ChannelInterface::NAME => 'A random string ' . uniqid(),
-            \MSP\NotifierApi\Api\Data\ChannelInterface::ADAPTER_CODE => 'A random string ' . uniqid(),
-            \MSP\NotifierApi\Api\Data\ChannelInterface::CODE => 'A random string ' . uniqid(),
+            \MSP\NotifierApi\Api\Data\ChannelInterface::ADAPTER_CODE => 'email',
+            \MSP\NotifierApi\Api\Data\ChannelInterface::CODE => 'A_random_string_' . uniqid(),
             \MSP\NotifierApi\Api\Data\ChannelInterface::ENABLED => (bool) rand(0, 1),
-            \MSP\NotifierApi\Api\Data\ChannelInterface::CONFIGURATION_JSON => 'A random string ' . uniqid(),
+            \MSP\NotifierApi\Api\Data\ChannelInterface::CONFIGURATION_JSON => '{"to": "mail@example.com", "from": "mail@example.com", "from_name": "From Name"}',
         ];
     }
 
@@ -90,6 +93,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
                     'Field ' . $k . ' not corresponding'
                 );
 
+                continue;
+            }
+
+            if ($k === 'extension_attributes') {
                 continue;
             }
 
